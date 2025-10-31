@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>1 Polynomial Regression | Machine Learning for Biostatistics</title>
+  <meta name="description" content="1 Polynomial Regression | Machine Learning for Biostatistics" />
+  <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="1 Polynomial Regression | Machine Learning for Biostatistics" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="1 Polynomial Regression | Machine Learning for Biostatistics" />
+  
+  
+  
+
+<meta name="author" content="Jaroslaw Harezlak &amp; Armando Teixeira-Pinto" />
+
+
+<meta name="date" content="2025-08-08" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="piecewise-regression-and-splines.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><center><img src="bca.png"><H3><b><font color="F26531"> Machine Learning for Biostatistics </font> </b></H3> <a href="https://canvas.sydney.edu.au/courses/66692/modules" style="color:364550" target="blank"><small><i> Back to canvas website </i></small></a></center></li>
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Beyond Linearity</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#introduction"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#dataset-used-in-the-examples"><i class="fa fa-check"></i>Dataset used in the examples</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#slides-from-the-videos"><i class="fa fa-check"></i>Slides from the videos</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>1</b> Polynomial Regression</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#PR1"><i class="fa fa-check"></i><b>1.1</b> Introduction</a></li>
+<li class="chapter" data-level="1.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#PR2"><i class="fa fa-check"></i><b>1.2</b> Readings</a></li>
+<li class="chapter" data-level="1.3" data-path="polynomial-regression.html"><a href="polynomial-regression.html#PR3"><i class="fa fa-check"></i><b>1.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="polynomial-regression.html"><a href="polynomial-regression.html#task-1---fit-a-cubic-model"><i class="fa fa-check"></i>Task 1 - Fit a cubic model</a></li>
+<li class="chapter" data-level="" data-path="polynomial-regression.html"><a href="polynomial-regression.html#task-2---mean-squared-error-for-the-quadratic-model"><i class="fa fa-check"></i>Task 2 - Mean Squared Error for the quadratic model</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="polynomial-regression.html"><a href="polynomial-regression.html#PR4"><i class="fa fa-check"></i><b>1.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html"><i class="fa fa-check"></i><b>2</b> Piecewise Regression and Splines</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#PWR1"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#PWR2"><i class="fa fa-check"></i><b>2.2</b> Readings</a></li>
+<li class="chapter" data-level="2.3" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#PWR3"><i class="fa fa-check"></i><b>2.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#task-1---fit-a-piecewise-linear-regression"><i class="fa fa-check"></i>Task 1 - Fit a piecewise linear regression</a></li>
+<li class="chapter" data-level="" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#task-2---fit-a-natural-cubic-spline"><i class="fa fa-check"></i>Task 2 - Fit a natural cubic spline</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#PWR4"><i class="fa fa-check"></i><b>2.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="smoothing-splines.html"><a href="smoothing-splines.html"><i class="fa fa-check"></i><b>3</b> Smoothing splines</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="smoothing-splines.html"><a href="smoothing-splines.html#SS1"><i class="fa fa-check"></i><b>3.1</b> Introduction</a></li>
+<li class="chapter" data-level="3.2" data-path="smoothing-splines.html"><a href="smoothing-splines.html#SS2"><i class="fa fa-check"></i><b>3.2</b> Readings</a></li>
+<li class="chapter" data-level="3.3" data-path="smoothing-splines.html"><a href="smoothing-splines.html#SS3"><i class="fa fa-check"></i><b>3.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="smoothing-splines.html"><a href="smoothing-splines.html#task-1---fit-a-smoothing-spline"><i class="fa fa-check"></i>Task 1 - Fit a smoothing spline</a></li>
+<li class="chapter" data-level="" data-path="smoothing-splines.html"><a href="smoothing-splines.html#task-2---fit-an-additive-model"><i class="fa fa-check"></i>Task 2 - Fit an additive model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="smoothing-splines.html"><a href="smoothing-splines.html#SS4"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><center><a href="https://canvas.sydney.edu.au/courses/66692/modules" style="color:364550" target="blank"><img src="usyd2.gif" width="60%"></a> <small>© A.Teixeira-Pinto, University of Sydney, 2021</small></center></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Machine Learning for Biostatistics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="polynomial-regression" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> Polynomial Regression<a href="polynomial-regression.html#polynomial-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="PR1" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Introduction<a href="polynomial-regression.html#PR1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The extension of the linear models <span class="math inline">\(y=\beta_0 + \beta_1x + \varepsilon\)</span> to
+include higher degree polynomial terms <span class="math inline">\(x^2\)</span>, <span class="math inline">\(x^3\)</span>, …, <span class="math inline">\(x^p\)</span> is
+straightforward. Each additional term can be viewed as another predictor in
+the regression equation:</p>
+<p><span class="math inline">\(y=\beta_0 + \beta_1x + \beta_2x^2 + \dots + \beta_px^p + \varepsilon\)</span></p>
+<p>This allows the fit of more flexible models representing the association between the
+outcome and some continuous predictors.</p>
+<p><img src="PolynomialFunctionsGraph.PNG" /></p>
+<p>However, in practice, we hardly go beyond the degree 3. If the association
+between the outcome and predictor is highly non-linear, than it is preferable
+to use the methods that we will discuss in the next sections.</p>
+<iframe width="784" height="441" src="https://www.youtube.com/embed/_ITRzgB6PPs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</div>
+<div id="PR2" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Readings<a href="polynomial-regression.html#PR2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Read the following chapters of <em>An introduction to statistical learning</em>:</p>
+<ul>
+<li>7.1 Polynomial Regression</li>
+</ul>
+</div>
+<div id="PR3" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Practice session<a href="polynomial-regression.html#PR3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="task-1---fit-a-cubic-model" class="section level3 unnumbered hasAnchor">
+<h3>Task 1 - Fit a cubic model<a href="polynomial-regression.html#task-1---fit-a-cubic-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The dataset <strong>triceps</strong> is available in the <code>MultiKink</code> package.</p>
+<p>The data contains the measurement of the triceps skin fold of 892 females
+(variable <em>triceps</em>) and we want to model its association with <strong>age</strong>.</p>
+<p>First, we will load the data</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="polynomial-regression.html#cb1-1" tabindex="-1"></a><span class="co">#libraries that we will need</span></span>
+<span id="cb1-2"><a href="polynomial-regression.html#cb1-2" tabindex="-1"></a><span class="co">#install.packages(&quot;MultiKink&quot;)  </span></span>
+<span id="cb1-3"><a href="polynomial-regression.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(MultiKink) <span class="co">#for the data</span></span>
+<span id="cb1-4"><a href="polynomial-regression.html#cb1-4" tabindex="-1"></a><span class="fu">library</span>(ggplot2)   <span class="co">#for the plots</span></span>
+<span id="cb1-5"><a href="polynomial-regression.html#cb1-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1974</span>)     <span class="co">#fix the random generator seed </span></span>
+<span id="cb1-6"><a href="polynomial-regression.html#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="polynomial-regression.html#cb1-7" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;triceps&quot;</span>)   <span class="co">#load the dataset triceps</span></span>
+<span id="cb1-8"><a href="polynomial-regression.html#cb1-8" tabindex="-1"></a>                  <span class="co">#notice that the variable of interest</span></span>
+<span id="cb1-9"><a href="polynomial-regression.html#cb1-9" tabindex="-1"></a>                  <span class="co">#it is also called triceps. Don&#39;t get </span></span>
+<span id="cb1-10"><a href="polynomial-regression.html#cb1-10" tabindex="-1"></a>                  <span class="co">#confused!</span></span></code></pre></div>
+<p>And plot the scatter for <strong>triceps</strong> and <strong>age</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="polynomial-regression.html#cb2-1" tabindex="-1"></a> <span class="co">#simple scatter</span></span>
+<span id="cb2-2"><a href="polynomial-regression.html#cb2-2" tabindex="-1"></a>  <span class="co">#we can store the scatter in an object </span></span>
+<span id="cb2-3"><a href="polynomial-regression.html#cb2-3" tabindex="-1"></a>  <span class="co">#to use it later</span></span>
+<span id="cb2-4"><a href="polynomial-regression.html#cb2-4" tabindex="-1"></a> tri.age.plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(triceps, <span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>triceps)) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="polynomial-regression.html#cb2-5" tabindex="-1"></a>                 <span class="fu">geom_point</span>(<span class="at">alpha=</span><span class="fl">0.55</span>, <span class="at">color=</span><span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb2-6"><a href="polynomial-regression.html#cb2-6" tabindex="-1"></a>                 <span class="fu">theme_minimal</span>() </span>
+<span id="cb2-7"><a href="polynomial-regression.html#cb2-7" tabindex="-1"></a> tri.age.plot</span></code></pre></div>
+<p><img src="_main_files/figure-html/plotagetric0-1.png" width="672" /></p>
+<p>To fit a cubic model we can write all the terms using the <code>I()</code> function to
+evaluate <span class="math inline">\(x^2\)</span> and <span class="math inline">\(x^3\)</span>, otherwise R will not use the quadratic and cubic terms:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="polynomial-regression.html#cb3-1" tabindex="-1"></a>model.cubic <span class="ot">&lt;-</span> <span class="fu">lm</span>(triceps<span class="sc">~</span>age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">3</span>),</span>
+<span id="cb3-2"><a href="polynomial-regression.html#cb3-2" tabindex="-1"></a>                  <span class="at">data=</span>triceps)</span>
+<span id="cb3-3"><a href="polynomial-regression.html#cb3-3" tabindex="-1"></a><span class="fu">summary</span>(model.cubic)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = triceps ~ age + I(age^2) + I(age^3), data = triceps)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -11.5832  -1.9284  -0.5415   1.3283  24.4440 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  8.004e+00  3.831e-01  20.893  &lt; 2e-16 ***
+## age         -3.157e-01  7.721e-02  -4.089 4.73e-05 ***
+## I(age^2)     3.101e-02  3.964e-03   7.824 1.45e-14 ***
+## I(age^3)    -4.566e-04  5.612e-05  -8.135 1.38e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.868 on 888 degrees of freedom
+## Multiple R-squared:  0.3836, Adjusted R-squared:  0.3815 
+## F-statistic: 184.2 on 3 and 888 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Another option is to use the <code>poly()</code> function. Note, however, that the this
+function fits a <strong>linear transformation</strong> of the terms <span class="math inline">\(x, x^2,x^3\)</span>. This is
+for numerical stability given that those three terms will be highly correlated.
+Thus, the regression coefficients will not be the same but the model is just
+a reparameterisation of the one above and its predictions are exactly the same.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="polynomial-regression.html#cb5-1" tabindex="-1"></a>model.cubic.poly <span class="ot">&lt;-</span> <span class="fu">lm</span>(triceps<span class="sc">~</span><span class="fu">poly</span>(age,<span class="dv">3</span>),</span>
+<span id="cb5-2"><a href="polynomial-regression.html#cb5-2" tabindex="-1"></a>                       <span class="at">data=</span>triceps)</span>
+<span id="cb5-3"><a href="polynomial-regression.html#cb5-3" tabindex="-1"></a><span class="fu">summary</span>(model.cubic.poly)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = triceps ~ poly(age, 3), data = triceps)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -11.5832  -1.9284  -0.5415   1.3283  24.4440 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     9.7024     0.1295  74.911  &lt; 2e-16 ***
+## poly(age, 3)1  85.2594     3.8682  22.041  &lt; 2e-16 ***
+## poly(age, 3)2  -3.1638     3.8682  -0.818    0.414    
+## poly(age, 3)3 -31.4683     3.8682  -8.135 1.38e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.868 on 888 degrees of freedom
+## Multiple R-squared:  0.3836, Adjusted R-squared:  0.3815 
+## F-statistic: 184.2 on 3 and 888 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>If you look at the predictions of both model, the results are exactly the same</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="polynomial-regression.html#cb7-1" tabindex="-1"></a> <span class="fu">plot</span>(<span class="fu">predict</span>(model.cubic.poly), <span class="fu">predict</span>(model.cubic))</span></code></pre></div>
+<p><img src="_main_files/figure-html/pr.cub-1.png" width="672" /></p>
+<p>We can also fit and plot the cubic model using <code>ggplot</code>. We will use the initial
+scatter plot an add the fitted curve</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="polynomial-regression.html#cb8-1" tabindex="-1"></a> <span class="co">#plots</span></span>
+<span id="cb8-2"><a href="polynomial-regression.html#cb8-2" tabindex="-1"></a> tri.age.plot <span class="sc">+</span> </span>
+<span id="cb8-3"><a href="polynomial-regression.html#cb8-3" tabindex="-1"></a>   <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, </span>
+<span id="cb8-4"><a href="polynomial-regression.html#cb8-4" tabindex="-1"></a>               <span class="at">formula =</span> y<span class="sc">~</span><span class="fu">poly</span>(x,<span class="dv">3</span>,<span class="at">raw=</span>T), <span class="at">size =</span> <span class="dv">1</span>) </span></code></pre></div>
+<p><img src="_main_files/figure-html/fitcubic-1.png" width="672" /></p>
+<p><strong>TRY IT YOURSELF:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Add a linear fit to the plot above</li>
+</ol>
+<details>
+<summary>
+See the solution code
+</summary>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="polynomial-regression.html#cb9-1" tabindex="-1"></a> tri.age.plot <span class="sc">+</span> </span>
+<span id="cb9-2"><a href="polynomial-regression.html#cb9-2" tabindex="-1"></a>   <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, </span>
+<span id="cb9-3"><a href="polynomial-regression.html#cb9-3" tabindex="-1"></a>               <span class="at">formula =</span> y<span class="sc">~</span><span class="fu">poly</span>(x,<span class="dv">3</span>,<span class="at">raw=</span>T), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="polynomial-regression.html#cb9-4" tabindex="-1"></a>     <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, </span>
+<span id="cb9-5"><a href="polynomial-regression.html#cb9-5" tabindex="-1"></a>               <span class="at">formula =</span> y<span class="sc">~</span><span class="fu">poly</span>(x,<span class="dv">1</span>,<span class="at">raw=</span>T), <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span> , <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<img src="_main_files/figure-html/lincub-1.png" width="672" />
+</details>
+<p>
+<p>
+</div>
+<div id="task-2---mean-squared-error-for-the-quadratic-model" class="section level3 unnumbered hasAnchor">
+<h3>Task 2 - Mean Squared Error for the quadratic model<a href="polynomial-regression.html#task-2---mean-squared-error-for-the-quadratic-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We will use the same dataset and the same variables as in TASK 1 but now we
+want to compute the cross-validated MSE for the quadratic model</p>
+<p>There are multiple ways of doing this. We will take advantage of the
+easy implementation of cross-validation in the <code>caret</code> package. We will do
+10-fold cross-validations and repeat it 10 times:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="polynomial-regression.html#cb10-1" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb10-2"><a href="polynomial-regression.html#cb10-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb10-3"><a href="polynomial-regression.html#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="polynomial-regression.html#cb10-4" tabindex="-1"></a><span class="co">#repeated CV for the MSE</span></span>
+<span id="cb10-5"><a href="polynomial-regression.html#cb10-5" tabindex="-1"></a>trC.lm <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>, </span>
+<span id="cb10-6"><a href="polynomial-regression.html#cb10-6" tabindex="-1"></a>                       <span class="at">number =</span> <span class="dv">10</span>,         <span class="co">#10-fold cross-validation</span></span>
+<span id="cb10-7"><a href="polynomial-regression.html#cb10-7" tabindex="-1"></a>                       <span class="at">repeats =</span> <span class="dv">10</span>)        <span class="co">#10 times</span></span>
+<span id="cb10-8"><a href="polynomial-regression.html#cb10-8" tabindex="-1"></a>  </span>
+<span id="cb10-9"><a href="polynomial-regression.html#cb10-9" tabindex="-1"></a><span class="co">#function to fit a polynomial model of degree x</span></span>
+<span id="cb10-10"><a href="polynomial-regression.html#cb10-10" tabindex="-1"></a>pol.model <span class="ot">&lt;-</span> <span class="fu">train</span>(triceps <span class="sc">~</span> <span class="fu">poly</span>(age,<span class="dv">2</span>),</span>
+<span id="cb10-11"><a href="polynomial-regression.html#cb10-11" tabindex="-1"></a>                       <span class="at">data =</span> triceps, </span>
+<span id="cb10-12"><a href="polynomial-regression.html#cb10-12" tabindex="-1"></a>                       <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb10-13"><a href="polynomial-regression.html#cb10-13" tabindex="-1"></a>                       <span class="at">trControl =</span> trC.lm)</span>
+<span id="cb10-14"><a href="polynomial-regression.html#cb10-14" tabindex="-1"></a>    </span>
+<span id="cb10-15"><a href="polynomial-regression.html#cb10-15" tabindex="-1"></a> <span class="co">#this is the root mean squared error</span></span>
+<span id="cb10-16"><a href="polynomial-regression.html#cb10-16" tabindex="-1"></a>  pol.model<span class="sc">$</span>results[<span class="dv">2</span>]                      </span></code></pre></div>
+<pre><code>##       RMSE
+## 1 3.988524</code></pre>
+<p><strong>TRY IT YOURSELF:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Calculate the MSE (or the root mean squared error) for the model using
+a degree 4 polynomial, through cross-validation</li>
+</ol>
+<details>
+<summary>
+See the solution code
+</summary>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="polynomial-regression.html#cb12-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1001</span>)</span>
+<span id="cb12-2"><a href="polynomial-regression.html#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="polynomial-regression.html#cb12-3" tabindex="-1"></a><span class="co">#repeated CV for the MSE</span></span>
+<span id="cb12-4"><a href="polynomial-regression.html#cb12-4" tabindex="-1"></a>trC.lm <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>, </span>
+<span id="cb12-5"><a href="polynomial-regression.html#cb12-5" tabindex="-1"></a>                       <span class="at">number =</span> <span class="dv">10</span>,         <span class="co">#10-fold cross-validation</span></span>
+<span id="cb12-6"><a href="polynomial-regression.html#cb12-6" tabindex="-1"></a>                       <span class="at">repeats =</span> <span class="dv">10</span>)        <span class="co">#10 times</span></span>
+<span id="cb12-7"><a href="polynomial-regression.html#cb12-7" tabindex="-1"></a>  </span>
+<span id="cb12-8"><a href="polynomial-regression.html#cb12-8" tabindex="-1"></a><span class="co">#function to fit a polynomial model of degree x</span></span>
+<span id="cb12-9"><a href="polynomial-regression.html#cb12-9" tabindex="-1"></a>pol.model <span class="ot">&lt;-</span> <span class="fu">train</span>(triceps <span class="sc">~</span> <span class="fu">poly</span>(age,<span class="dv">4</span>),</span>
+<span id="cb12-10"><a href="polynomial-regression.html#cb12-10" tabindex="-1"></a>                       <span class="at">data =</span> triceps, </span>
+<span id="cb12-11"><a href="polynomial-regression.html#cb12-11" tabindex="-1"></a>                       <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb12-12"><a href="polynomial-regression.html#cb12-12" tabindex="-1"></a>                       <span class="at">trControl =</span> trC.lm)</span>
+<span id="cb12-13"><a href="polynomial-regression.html#cb12-13" tabindex="-1"></a>    </span>
+<span id="cb12-14"><a href="polynomial-regression.html#cb12-14" tabindex="-1"></a> <span class="co">#this is the root mean squared error</span></span>
+<span id="cb12-15"><a href="polynomial-regression.html#cb12-15" tabindex="-1"></a>  pol.model<span class="sc">$</span>results[<span class="dv">2</span>]                      </span></code></pre></div>
+<pre><code>##       RMSE
+## 1 3.782918</code></pre>
+</details>
+<p>
+<p>
+<ol start="2" style="list-style-type: decimal">
+<li>Calculate the MSE (or the root mean squared error) for the models using
+polynomials from degree 1 (linear) up to 10</li>
+</ol>
+<details>
+<summary>
+See the solution code
+</summary>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="polynomial-regression.html#cb14-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1001</span>)</span>
+<span id="cb14-2"><a href="polynomial-regression.html#cb14-2" tabindex="-1"></a>   <span class="co">#repeated CV for the MSE</span></span>
+<span id="cb14-3"><a href="polynomial-regression.html#cb14-3" tabindex="-1"></a>  trC.lm <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>, </span>
+<span id="cb14-4"><a href="polynomial-regression.html#cb14-4" tabindex="-1"></a>                         <span class="at">number =</span> <span class="dv">10</span>, </span>
+<span id="cb14-5"><a href="polynomial-regression.html#cb14-5" tabindex="-1"></a>                         <span class="at">repeats =</span> <span class="dv">10</span>)</span>
+<span id="cb14-6"><a href="polynomial-regression.html#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="polynomial-regression.html#cb14-7" tabindex="-1"></a>  <span class="co">#function to fit a polynomial model of degree x</span></span>
+<span id="cb14-8"><a href="polynomial-regression.html#cb14-8" tabindex="-1"></a>  my.pol.f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb14-9"><a href="polynomial-regression.html#cb14-9" tabindex="-1"></a>    xx<span class="ot">&lt;-</span><span class="fu">poly</span>(triceps<span class="sc">$</span>age, x, <span class="at">raw=</span>T)                   <span class="co">#design matrix with age,</span></span>
+<span id="cb14-10"><a href="polynomial-regression.html#cb14-10" tabindex="-1"></a>                                                      <span class="co">#age^2, ..., age^10</span></span>
+<span id="cb14-11"><a href="polynomial-regression.html#cb14-11" tabindex="-1"></a>    new.data  <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">triceps=</span>triceps<span class="sc">$</span>triceps, xx)   <span class="co">#dataset with the added</span></span>
+<span id="cb14-12"><a href="polynomial-regression.html#cb14-12" tabindex="-1"></a>                                                      <span class="co">#poly terms</span></span>
+<span id="cb14-13"><a href="polynomial-regression.html#cb14-13" tabindex="-1"></a>    pol.model <span class="ot">&lt;-</span> <span class="fu">train</span>(triceps <span class="sc">~</span> .,                   <span class="co">#the . uses all the </span></span>
+<span id="cb14-14"><a href="polynomial-regression.html#cb14-14" tabindex="-1"></a>                          <span class="at">data =</span> new.data,            <span class="co">#predictors</span></span>
+<span id="cb14-15"><a href="polynomial-regression.html#cb14-15" tabindex="-1"></a>                          <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb14-16"><a href="polynomial-regression.html#cb14-16" tabindex="-1"></a>                          <span class="at">trControl =</span> trC.lm)</span>
+<span id="cb14-17"><a href="polynomial-regression.html#cb14-17" tabindex="-1"></a>    </span>
+<span id="cb14-18"><a href="polynomial-regression.html#cb14-18" tabindex="-1"></a>    RMSE.cv <span class="ot">=</span> pol.model<span class="sc">$</span>results[<span class="dv">2</span>]</span>
+<span id="cb14-19"><a href="polynomial-regression.html#cb14-19" tabindex="-1"></a>  }</span>
+<span id="cb14-20"><a href="polynomial-regression.html#cb14-20" tabindex="-1"></a>  </span>
+<span id="cb14-21"><a href="polynomial-regression.html#cb14-21" tabindex="-1"></a>    <span class="co">#RMSE</span></span>
+<span id="cb14-22"><a href="polynomial-regression.html#cb14-22" tabindex="-1"></a>  <span class="fu">t</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, my.pol.f))                        <span class="co">#applies the function</span></span>
+<span id="cb14-23"><a href="polynomial-regression.html#cb14-23" tabindex="-1"></a>                                                   <span class="co">#to poly degrees 1 to 10</span></span></code></pre></div>
+</details>
+<p>
+<p>
+</div>
+</div>
+<div id="PR4" class="section level2 hasAnchor" number="1.4">
+<h2><span class="header-section-number">1.4</span> Exercises<a href="polynomial-regression.html#PR4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Solve the following exercise:</p>
+<ol style="list-style-type: decimal">
+<li>The dataset <a href="https://www.dropbox.com/s/cwkw3p91zyizcqz/SA_heart.csv?dl=1">SA_heart.csv</a>
+contains on coronary heart disease status (variable <em>chd</em>) and several risk
+factors including the cumulative tobacco comsumption <em>tobacco</em>.</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li><p>Fit a logistic model for <em>chd</em> using the predictor <em>tobacco</em>
+(as a linear effect) and compute its AIC</p></li>
+<li><p>Plot the fitted curve in a)</p></li>
+<li><p>Fit a logistic model for <em>chd</em> allowing a cubic effect of the
+predictor <em>tobacco</em> and compute its AIC.</p></li>
+<li><p>Plot the fitted curve in c)</p></li>
+<li><p>Compute the cross-validated ROC of the models a) and c) (use the <code>caret</code>
+package)</p></li>
+</ol>
+<details>
+<summary>
+See the solution code for e)
+</summary>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="polynomial-regression.html#cb15-1" tabindex="-1"></a>    <span class="fu">library</span>(caret)</span>
+<span id="cb15-2"><a href="polynomial-regression.html#cb15-2" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">2001</span>)</span>
+<span id="cb15-3"><a href="polynomial-regression.html#cb15-3" tabindex="-1"></a>    SA_heart <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://www.dropbox.com/s/cwkw3p91zyizcqz/SA_heart.csv?dl=1&quot;</span>)</span>
+<span id="cb15-4"><a href="polynomial-regression.html#cb15-4" tabindex="-1"></a>    </span>
+<span id="cb15-5"><a href="polynomial-regression.html#cb15-5" tabindex="-1"></a>    <span class="co"># caret will give an error for factors coded as 0 and 1</span></span>
+<span id="cb15-6"><a href="polynomial-regression.html#cb15-6" tabindex="-1"></a>    <span class="co"># because it uses the factors names to create</span></span>
+<span id="cb15-7"><a href="polynomial-regression.html#cb15-7" tabindex="-1"></a>    <span class="co"># names of internal variables. This way it is better</span></span>
+<span id="cb15-8"><a href="polynomial-regression.html#cb15-8" tabindex="-1"></a>    <span class="co">#to use an outcome variable with strings as the factor names</span></span>
+<span id="cb15-9"><a href="polynomial-regression.html#cb15-9" tabindex="-1"></a>    SA_heart<span class="sc">$</span>chd.f <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(SA_heart<span class="sc">$</span>chd <span class="sc">==</span><span class="dv">1</span>, </span>
+<span id="cb15-10"><a href="polynomial-regression.html#cb15-10" tabindex="-1"></a>                             <span class="st">&quot;chd&quot;</span>, </span>
+<span id="cb15-11"><a href="polynomial-regression.html#cb15-11" tabindex="-1"></a>                             <span class="st">&quot;nochd&quot;</span>)     </span>
+<span id="cb15-12"><a href="polynomial-regression.html#cb15-12" tabindex="-1"></a>    </span>
+<span id="cb15-13"><a href="polynomial-regression.html#cb15-13" tabindex="-1"></a>    <span class="co">#sets the control for 10-fold cross-validation, 10 times</span></span>
+<span id="cb15-14"><a href="polynomial-regression.html#cb15-14" tabindex="-1"></a>    <span class="co"># the classProbs = TRUE and summaryFunction = twoClassSummary</span></span>
+<span id="cb15-15"><a href="polynomial-regression.html#cb15-15" tabindex="-1"></a>    <span class="co"># store the information to compute the area under the ROC</span></span>
+<span id="cb15-16"><a href="polynomial-regression.html#cb15-16" tabindex="-1"></a>    trC.lm <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>, </span>
+<span id="cb15-17"><a href="polynomial-regression.html#cb15-17" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">10</span>, </span>
+<span id="cb15-18"><a href="polynomial-regression.html#cb15-18" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="dv">10</span>,</span>
+<span id="cb15-19"><a href="polynomial-regression.html#cb15-19" tabindex="-1"></a>                           <span class="at">classProbs =</span> <span class="cn">TRUE</span>,                 <span class="co">#necessary for </span></span>
+<span id="cb15-20"><a href="polynomial-regression.html#cb15-20" tabindex="-1"></a>                           <span class="at">summaryFunction =</span> twoClassSummary) <span class="co">#the AUC ROC</span></span>
+<span id="cb15-21"><a href="polynomial-regression.html#cb15-21" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="polynomial-regression.html#cb15-22" tabindex="-1"></a>     <span class="co">#linear effect</span></span>
+<span id="cb15-23"><a href="polynomial-regression.html#cb15-23" tabindex="-1"></a>     roc.l <span class="ot">&lt;-</span> <span class="fu">train</span>(<span class="at">form =</span> chd.f  <span class="sc">~</span> tobacco,</span>
+<span id="cb15-24"><a href="polynomial-regression.html#cb15-24" tabindex="-1"></a>                    <span class="at">data =</span> SA_heart,</span>
+<span id="cb15-25"><a href="polynomial-regression.html#cb15-25" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>,</span>
+<span id="cb15-26"><a href="polynomial-regression.html#cb15-26" tabindex="-1"></a>                    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb15-27"><a href="polynomial-regression.html#cb15-27" tabindex="-1"></a>                    <span class="at">trControl =</span> trC.lm,</span>
+<span id="cb15-28"><a href="polynomial-regression.html#cb15-28" tabindex="-1"></a>                    <span class="at">metric =</span> <span class="st">&quot;ROC&quot;</span>) </span>
+<span id="cb15-29"><a href="polynomial-regression.html#cb15-29" tabindex="-1"></a>     <span class="co">#cubic effect</span></span>
+<span id="cb15-30"><a href="polynomial-regression.html#cb15-30" tabindex="-1"></a>     roc.c <span class="ot">&lt;-</span> <span class="fu">train</span>(<span class="at">form =</span> chd.f  <span class="sc">~</span> <span class="fu">poly</span>(tobacco,<span class="dv">3</span>),</span>
+<span id="cb15-31"><a href="polynomial-regression.html#cb15-31" tabindex="-1"></a>                    <span class="at">data =</span> SA_heart,</span>
+<span id="cb15-32"><a href="polynomial-regression.html#cb15-32" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>,</span>
+<span id="cb15-33"><a href="polynomial-regression.html#cb15-33" tabindex="-1"></a>                    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb15-34"><a href="polynomial-regression.html#cb15-34" tabindex="-1"></a>                    <span class="at">trControl =</span> trC.lm,</span>
+<span id="cb15-35"><a href="polynomial-regression.html#cb15-35" tabindex="-1"></a>                    <span class="at">metric =</span> <span class="st">&quot;ROC&quot;</span>) </span>
+<span id="cb15-36"><a href="polynomial-regression.html#cb15-36" tabindex="-1"></a>  </span>
+<span id="cb15-37"><a href="polynomial-regression.html#cb15-37" tabindex="-1"></a>     roc.l </span>
+<span id="cb15-38"><a href="polynomial-regression.html#cb15-38" tabindex="-1"></a>     roc.c</span></code></pre></div>
+</details>
+<p>
+<p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Which model would you prefer?</li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="piecewise-regression-and-splines.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

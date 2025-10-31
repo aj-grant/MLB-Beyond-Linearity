@@ -1,0 +1,15 @@
+polynomial-regression
+PR1
+PR2
+PR3
+PR4
+piecewise-regression-and-splines
+PWR1
+PWR2
+PWR3
+PWR4
+smoothing-splines
+SS1
+SS2
+SS3
+SS4

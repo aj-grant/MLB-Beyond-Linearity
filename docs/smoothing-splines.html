@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Smoothing splines | Machine Learning for Biostatistics</title>
+  <meta name="description" content="3 Smoothing splines | Machine Learning for Biostatistics" />
+  <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Smoothing splines | Machine Learning for Biostatistics" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Smoothing splines | Machine Learning for Biostatistics" />
+  
+  
+  
+
+<meta name="author" content="Jaroslaw Harezlak &amp; Armando Teixeira-Pinto" />
+
+
+<meta name="date" content="2025-08-08" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="piecewise-regression-and-splines.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><center><img src="bca.png"><H3><b><font color="F26531"> Machine Learning for Biostatistics </font> </b></H3> <a href="https://canvas.sydney.edu.au/courses/66692/modules" style="color:364550" target="blank"><small><i> Back to canvas website </i></small></a></center></li>
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Beyond Linearity</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#introduction"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#dataset-used-in-the-examples"><i class="fa fa-check"></i>Dataset used in the examples</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#slides-from-the-videos"><i class="fa fa-check"></i>Slides from the videos</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>1</b> Polynomial Regression</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#PR1"><i class="fa fa-check"></i><b>1.1</b> Introduction</a></li>
+<li class="chapter" data-level="1.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#PR2"><i class="fa fa-check"></i><b>1.2</b> Readings</a></li>
+<li class="chapter" data-level="1.3" data-path="polynomial-regression.html"><a href="polynomial-regression.html#PR3"><i class="fa fa-check"></i><b>1.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="polynomial-regression.html"><a href="polynomial-regression.html#task-1---fit-a-cubic-model"><i class="fa fa-check"></i>Task 1 - Fit a cubic model</a></li>
+<li class="chapter" data-level="" data-path="polynomial-regression.html"><a href="polynomial-regression.html#task-2---mean-squared-error-for-the-quadratic-model"><i class="fa fa-check"></i>Task 2 - Mean Squared Error for the quadratic model</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="polynomial-regression.html"><a href="polynomial-regression.html#PR4"><i class="fa fa-check"></i><b>1.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html"><i class="fa fa-check"></i><b>2</b> Piecewise Regression and Splines</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#PWR1"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#PWR2"><i class="fa fa-check"></i><b>2.2</b> Readings</a></li>
+<li class="chapter" data-level="2.3" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#PWR3"><i class="fa fa-check"></i><b>2.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#task-1---fit-a-piecewise-linear-regression"><i class="fa fa-check"></i>Task 1 - Fit a piecewise linear regression</a></li>
+<li class="chapter" data-level="" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#task-2---fit-a-natural-cubic-spline"><i class="fa fa-check"></i>Task 2 - Fit a natural cubic spline</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="piecewise-regression-and-splines.html"><a href="piecewise-regression-and-splines.html#PWR4"><i class="fa fa-check"></i><b>2.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="smoothing-splines.html"><a href="smoothing-splines.html"><i class="fa fa-check"></i><b>3</b> Smoothing splines</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="smoothing-splines.html"><a href="smoothing-splines.html#SS1"><i class="fa fa-check"></i><b>3.1</b> Introduction</a></li>
+<li class="chapter" data-level="3.2" data-path="smoothing-splines.html"><a href="smoothing-splines.html#SS2"><i class="fa fa-check"></i><b>3.2</b> Readings</a></li>
+<li class="chapter" data-level="3.3" data-path="smoothing-splines.html"><a href="smoothing-splines.html#SS3"><i class="fa fa-check"></i><b>3.3</b> Practice session</a>
+<ul>
+<li class="chapter" data-level="" data-path="smoothing-splines.html"><a href="smoothing-splines.html#task-1---fit-a-smoothing-spline"><i class="fa fa-check"></i>Task 1 - Fit a smoothing spline</a></li>
+<li class="chapter" data-level="" data-path="smoothing-splines.html"><a href="smoothing-splines.html#task-2---fit-an-additive-model"><i class="fa fa-check"></i>Task 2 - Fit an additive model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="smoothing-splines.html"><a href="smoothing-splines.html#SS4"><i class="fa fa-check"></i><b>3.4</b> Exercises</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><center><a href="https://canvas.sydney.edu.au/courses/66692/modules" style="color:364550" target="blank"><img src="usyd2.gif" width="60%"></a> <small>© A.Teixeira-Pinto, University of Sydney, 2021</small></center></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="../_book">Machine Learning for Biostatistics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="smoothing-splines" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> Smoothing splines<a href="smoothing-splines.html#smoothing-splines" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="SS1" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Introduction<a href="smoothing-splines.html#SS1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the previous section we learn how to fit regression splines by specifying
+the knots and a set of basis function. It should be easy to see that a higher
+number of knots will lead to a lower MSE because we will be overfitting the
+features of the curve.</p>
+<p>The model below is fitted with natural splines with 25 knots.</p>
+<p><img src="module4_3_manyknots.png" />
+Clearly the curve seems to be overfitting the data.</p>
+<p>We will use a similar idea to the one used in regularisation (module 4). We
+select many knots but penalise for the roughness of the fitting.</p>
+<p>Remember that
+the 1st derivative indicates the slope of the curve and the second derivative
+is the speed of change of the slope. Thus, the second derivative of a curve is
+associated with the roughness of the curve.</p>
+<p>We will then use the second derivative as the penalisation term in the
+residual sum of squares.</p>
+<p><span class="math inline">\(\sum_{i=1}^{n} (y_i-f(x_i))^2 + \lambda \int f&#39;&#39;(t)^2 dt\)</span></p>
+<p>The result is a <strong>smoothing spline</strong>. For smoothing splines, the number
+of knots is not as important given that the penalisation
+term will handle the roughness.</p>
+<p>The animation below, shows the fitting of smoothing splines, with
+amounts of penalisation (<em>lambda</em>), and automatic choice of number of knots
+given by the <code>smooth.spline</code> function in R. The cross validated MSE is also
+shown.</p>
+<p><img src="ssplines.gif" /></p>
+<p>A large <span class="math inline">\(\lambda\)</span> results in a smooth curve (a straight line in the limit)
+and a smaller <span class="math inline">\(\lambda\)</span> leads to a more rough curve. The optimal <span class="math inline">\(\lambda\)</span>
+can be chosen by cross-validation.</p>
+<p>The smoothing splines can be incorporated in the generalised linear models
+framework which is usually referred as <strong>generalised additive models</strong> (GAM).
+Rather than a linear effect of a predictor, we can have a smoothing spline
+modeling
+the association of the predictor with the outcome:</p>
+<p><span class="math inline">\(g\left(E(y|\mathbf{x} ) \right) = \beta_0 + f_1(x_{1}) + f_2(x_{2}) + ... + f_k(x_{k})\)</span></p>
+<p>Notice that <span class="math inline">\(f_p(x_p)\)</span> can be a linear function <span class="math inline">\(\beta_p x_p\)</span> and if all <span class="math inline">\(f\)</span>’s
+are linear function, the model above is a GLM.</p>
+<iframe width="784" height="441" src="https://www.youtube.com/embed/Zgg3GlXsIKQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+</div>
+<div id="SS2" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Readings<a href="smoothing-splines.html#SS2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Read the following chapters of <em>An introduction to statistical learning</em>:</p>
+<ul>
+<li>7.5 Smoothing Splines</li>
+<li>7.7 Generalised Additive Model</li>
+</ul>
+</div>
+<div id="SS3" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Practice session<a href="smoothing-splines.html#SS3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="task-1---fit-a-smoothing-spline" class="section level3 unnumbered hasAnchor">
+<h3>Task 1 - Fit a smoothing spline<a href="smoothing-splines.html#task-1---fit-a-smoothing-spline" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We will continue the example using the dataset <strong>triceps</strong>available in
+the <code>MultiKink</code> package. The data contains the measurement of the triceps
+skin fold of 892 females (variable <em>triceps</em>) and we want to model
+its association with <strong>age</strong>, using smoothing cubic splines.</p>
+<p>The function <code>smooth.spline()</code> fits smoothing cubic splines. We can provide the
+penalisation and/or number of knots, df, or just use the defaults.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="smoothing-splines.html#cb32-1" tabindex="-1"></a><span class="fu">library</span>(splines)</span>
+<span id="cb32-2"><a href="smoothing-splines.html#cb32-2" tabindex="-1"></a><span class="fu">library</span>(MultiKink) <span class="co">#for the data</span></span>
+<span id="cb32-3"><a href="smoothing-splines.html#cb32-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)   <span class="co">#for the plots</span></span>
+<span id="cb32-4"><a href="smoothing-splines.html#cb32-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1974</span>)     <span class="co">#fix the random generator seed </span></span>
+<span id="cb32-5"><a href="smoothing-splines.html#cb32-5" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="smoothing-splines.html#cb32-6" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;triceps&quot;</span>)   <span class="co">#load the dataset triceps</span></span>
+<span id="cb32-7"><a href="smoothing-splines.html#cb32-7" tabindex="-1"></a>                  <span class="co">#notice that the variable of interest</span></span>
+<span id="cb32-8"><a href="smoothing-splines.html#cb32-8" tabindex="-1"></a>                  <span class="co">#it is also called triceps. Don&#39;t get </span></span>
+<span id="cb32-9"><a href="smoothing-splines.html#cb32-9" tabindex="-1"></a>                  <span class="co">#confused!</span></span>
+<span id="cb32-10"><a href="smoothing-splines.html#cb32-10" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="smoothing-splines.html#cb32-11" tabindex="-1"></a><span class="co">#smooth spline with automatic number of knots chosen</span></span>
+<span id="cb32-12"><a href="smoothing-splines.html#cb32-12" tabindex="-1"></a><span class="co">#and penalisation chosen by leave-one-out CV (this is the</span></span>
+<span id="cb32-13"><a href="smoothing-splines.html#cb32-13" tabindex="-1"></a><span class="co">#option cv=T, otherwise generalized’ cross-validation is used)</span></span>
+<span id="cb32-14"><a href="smoothing-splines.html#cb32-14" tabindex="-1"></a>sspline <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(triceps<span class="sc">$</span>age, </span>
+<span id="cb32-15"><a href="smoothing-splines.html#cb32-15" tabindex="-1"></a>                         triceps<span class="sc">$</span>triceps, </span>
+<span id="cb32-16"><a href="smoothing-splines.html#cb32-16" tabindex="-1"></a>                         <span class="at">cv=</span><span class="cn">TRUE</span>) </span></code></pre></div>
+<pre><code>## Warning in smooth.spline(triceps$age, triceps$triceps, cv = TRUE): cross-validation with non-unique &#39;x&#39; values seems
+## doubtful</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="smoothing-splines.html#cb34-1" tabindex="-1"></a><span class="fu">plot</span>(triceps<span class="sc">$</span>age, triceps<span class="sc">$</span>triceps)</span>
+<span id="cb34-2"><a href="smoothing-splines.html#cb34-2" tabindex="-1"></a><span class="fu">lines</span>(sspline, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>*Note: The generalised cross-validation (default), in this case, selects a
+very low value for <span class="math inline">\(\lambda\)</span> which results in under smoothing. It is not clear
+why that is the case.</p>
+<p>Let’s get the triceps predicted value for the ages of 10 and 30</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="smoothing-splines.html#cb35-1" tabindex="-1"></a><span class="fu">predict</span>(sspline, <span class="at">x=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">30</span>))</span></code></pre></div>
+<pre><code>## $x
+## [1] 10 30
+## 
+## $y
+## [1]  6.470573 14.290032</code></pre>
+<p>The predicted values are 6.4705727 and
+14.2900322, respectively.</p>
+<p>As mentioned before, we could have chosen the amount of penalisation and this
+would lead to a different smoothing. For example, for</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="smoothing-splines.html#cb37-1" tabindex="-1"></a>sspline <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(triceps<span class="sc">$</span>age, </span>
+<span id="cb37-2"><a href="smoothing-splines.html#cb37-2" tabindex="-1"></a>                         triceps<span class="sc">$</span>triceps, <span class="at">lambda=</span>.<span class="dv">0001</span>) </span>
+<span id="cb37-3"><a href="smoothing-splines.html#cb37-3" tabindex="-1"></a><span class="fu">plot</span>(triceps<span class="sc">$</span>age, triceps<span class="sc">$</span>triceps)</span>
+<span id="cb37-4"><a href="smoothing-splines.html#cb37-4" tabindex="-1"></a><span class="fu">lines</span>(sspline, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><strong>TRY IT YOURSELF:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Fit smoothing splines with <em>df=19</em> and <em>df=30</em> and compare them with the one
+above. Comment on the results.</li>
+</ol>
+<details>
+<summary>
+See the solution code
+</summary>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="smoothing-splines.html#cb38-1" tabindex="-1"></a>sspline <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(triceps<span class="sc">$</span>age, </span>
+<span id="cb38-2"><a href="smoothing-splines.html#cb38-2" tabindex="-1"></a>                         triceps<span class="sc">$</span>triceps, <span class="at">lambda=</span>.<span class="dv">0001</span>) </span>
+<span id="cb38-3"><a href="smoothing-splines.html#cb38-3" tabindex="-1"></a>sspline19 <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(triceps<span class="sc">$</span>age, </span>
+<span id="cb38-4"><a href="smoothing-splines.html#cb38-4" tabindex="-1"></a>                         triceps<span class="sc">$</span>triceps, <span class="at">df=</span><span class="dv">19</span>) </span>
+<span id="cb38-5"><a href="smoothing-splines.html#cb38-5" tabindex="-1"></a>sspline30 <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(triceps<span class="sc">$</span>age, </span>
+<span id="cb38-6"><a href="smoothing-splines.html#cb38-6" tabindex="-1"></a>                         triceps<span class="sc">$</span>triceps, <span class="at">df=</span><span class="dv">30</span>) </span>
+<span id="cb38-7"><a href="smoothing-splines.html#cb38-7" tabindex="-1"></a><span class="fu">plot</span>(triceps<span class="sc">$</span>age, triceps<span class="sc">$</span>triceps)</span>
+<span id="cb38-8"><a href="smoothing-splines.html#cb38-8" tabindex="-1"></a><span class="fu">lines</span>(sspline, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb38-9"><a href="smoothing-splines.html#cb38-9" tabindex="-1"></a><span class="fu">lines</span>(sspline19, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb38-10"><a href="smoothing-splines.html#cb38-10" tabindex="-1"></a><span class="fu">lines</span>(sspline30, <span class="at">col=</span><span class="st">&quot;green&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>The spline with df=19 corresponds to having a lambda=.0001, so the result is the
+same. If you run <code>sspline</code> and <code>sspline</code> you can see that the parameters are
+similar.</p>
+<p>The spline with df=30 will be more flexible (more rough).</p>
+</details>
+<p>
+<p>
+</div>
+<div id="task-2---fit-an-additive-model" class="section level3 unnumbered hasAnchor">
+<h3>Task 2 - Fit an additive model<a href="smoothing-splines.html#task-2---fit-an-additive-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The dataset <a href="https://www.dropbox.com/s/7wjsfdaf0wt2kg2/bmd.csv?dl=1">bmd.csv</a>
+contains 169 measurement of bone mineral density (variable <em>bmd</em>) in men and
+women of different age. We want to fit a model for <em>bmd</em> using <em>age</em>, <em>sex</em>
+and <em>bmi</em> as predictors.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="smoothing-splines.html#cb39-1" tabindex="-1"></a><span class="co">#read the data and compute BMI</span></span>
+<span id="cb39-2"><a href="smoothing-splines.html#cb39-2" tabindex="-1"></a>bmd.data     <span class="ot">&lt;-</span> </span>
+<span id="cb39-3"><a href="smoothing-splines.html#cb39-3" tabindex="-1"></a>  <span class="fu">read.csv</span>(<span class="st">&quot;https://www.dropbox.com/s/c6mhgatkotuze8o/bmd.csv?dl=1&quot;</span>, </span>
+<span id="cb39-4"><a href="smoothing-splines.html#cb39-4" tabindex="-1"></a>           <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb39-5"><a href="smoothing-splines.html#cb39-5" tabindex="-1"></a>bmd.data<span class="sc">$</span>bmi <span class="ot">&lt;-</span> bmd.data<span class="sc">$</span>weight_kg <span class="sc">/</span> (bmd.data<span class="sc">$</span>height_cm<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<p>We will use the function <code>gam()</code> from the <code>mgcv</code> library. Notice that there is
+another gam function from the gam package (from the help file: “Note that this version of gam is different from the function with the same name in the R library mgcv, which uses only smoothing splines with a focus on automatic smoothing parameter selection via GCV.”)</p>
+<p>The function <code>s()</code> within the model indicates that we want to smoothing spline
+for that predictor. There are several types of splines implemented in the
+function. We will use the option basis spline equal to cubic regression splines:
+<code>bs="cr"</code>. The function <code>s()</code> has similarities to the <code>smooth.spline()</code> but
+is implemented</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="smoothing-splines.html#cb40-1" tabindex="-1"></a><span class="co">#libraries that we will need</span></span>
+<span id="cb40-2"><a href="smoothing-splines.html#cb40-2" tabindex="-1"></a><span class="fu">library</span>(mgcv)   <span class="co">#package for gam</span></span>
+<span id="cb40-3"><a href="smoothing-splines.html#cb40-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1974</span>) <span class="co">#fix the random generator seed </span></span>
+<span id="cb40-4"><a href="smoothing-splines.html#cb40-4" tabindex="-1"></a>bmd.gam <span class="ot">&lt;-</span> <span class="fu">gam</span>(bmd <span class="sc">~</span> <span class="fu">s</span>(age, <span class="at">bs=</span><span class="st">&quot;cr&quot;</span>)<span class="sc">+</span> <span class="fu">s</span>(bmi, <span class="at">bs=</span><span class="st">&quot;cr&quot;</span>) <span class="sc">+</span> sex, <span class="at">data=</span>bmd.data)</span>
+<span id="cb40-5"><a href="smoothing-splines.html#cb40-5" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="smoothing-splines.html#cb40-6" tabindex="-1"></a><span class="fu">summary</span>(bmd.gam)</span></code></pre></div>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## bmd ~ s(age, bs = &quot;cr&quot;) + s(bmi, bs = &quot;cr&quot;) + sex
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.74193    0.01456   50.97  &lt; 2e-16 ***
+## sexM         0.08092    0.02064    3.92 0.000131 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##          edf Ref.df     F  p-value    
+## s(age) 1.035  1.070 17.65 3.02e-05 ***
+## s(bmi) 5.687  6.611 10.09  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.381   Deviance explained = 40.9%
+## GCV = 0.018099  Scale est. = 0.017165  n = 169</code></pre>
+<p>The effective number of degrees of freedom for age is approximately 1, which
+suggests that the effect of age is linear. We can plot the fitted splines
+for each predictor. Notice, however, that the plot is not in the original scale.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="smoothing-splines.html#cb42-1" tabindex="-1"></a><span class="fu">plot</span>(bmd.gam)</span></code></pre></div>
+<p><img src="_main_files/figure-html/plotgam-1.png" width="672" /><img src="_main_files/figure-html/plotgam-2.png" width="672" /></p>
+<p>We can also plot the surface fitted for each sex. For example, for women,</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="smoothing-splines.html#cb43-1" tabindex="-1"></a><span class="co"># Let&#39;s create a grid to be used in  persp() </span></span>
+<span id="cb43-2"><a href="smoothing-splines.html#cb43-2" tabindex="-1"></a>steps <span class="ot">&lt;-</span> <span class="dv">60</span></span>
+<span id="cb43-3"><a href="smoothing-splines.html#cb43-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">with</span>(bmd.data, </span>
+<span id="cb43-4"><a href="smoothing-splines.html#cb43-4" tabindex="-1"></a>            <span class="fu">seq</span>(<span class="fu">min</span>(age), <span class="fu">max</span>(age), </span>
+<span id="cb43-5"><a href="smoothing-splines.html#cb43-5" tabindex="-1"></a>                <span class="at">length =</span> steps) )</span>
+<span id="cb43-6"><a href="smoothing-splines.html#cb43-6" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="smoothing-splines.html#cb43-7" tabindex="-1"></a>bmi <span class="ot">&lt;-</span>  <span class="fu">with</span>(bmd.data, </span>
+<span id="cb43-8"><a href="smoothing-splines.html#cb43-8" tabindex="-1"></a>             <span class="fu">seq</span>(<span class="fu">min</span>(bmi), <span class="fu">max</span>(bmi), </span>
+<span id="cb43-9"><a href="smoothing-splines.html#cb43-9" tabindex="-1"></a>                 <span class="at">length =</span> steps) )</span>
+<span id="cb43-10"><a href="smoothing-splines.html#cb43-10" tabindex="-1"></a></span>
+<span id="cb43-11"><a href="smoothing-splines.html#cb43-11" tabindex="-1"></a>newdat <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">age =</span> age,             <span class="co">#grid</span></span>
+<span id="cb43-12"><a href="smoothing-splines.html#cb43-12" tabindex="-1"></a>                      <span class="at">bmi =</span> bmi, </span>
+<span id="cb43-13"><a href="smoothing-splines.html#cb43-13" tabindex="-1"></a>                      <span class="at">sex=</span><span class="st">&quot;F&quot;</span>)  </span>
+<span id="cb43-14"><a href="smoothing-splines.html#cb43-14" tabindex="-1"></a></span>
+<span id="cb43-15"><a href="smoothing-splines.html#cb43-15" tabindex="-1"></a>bmdpred <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">predict</span>(bmd.gam, newdat), </span>
+<span id="cb43-16"><a href="smoothing-splines.html#cb43-16" tabindex="-1"></a>                  steps, steps)             <span class="co">#predictions</span></span>
+<span id="cb43-17"><a href="smoothing-splines.html#cb43-17" tabindex="-1"></a></span>
+<span id="cb43-18"><a href="smoothing-splines.html#cb43-18" tabindex="-1"></a><span class="co"># Now plot it</span></span>
+<span id="cb43-19"><a href="smoothing-splines.html#cb43-19" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">persp</span>(age, bmi,</span>
+<span id="cb43-20"><a href="smoothing-splines.html#cb43-20" tabindex="-1"></a>           bmdpred, </span>
+<span id="cb43-21"><a href="smoothing-splines.html#cb43-21" tabindex="-1"></a>           <span class="at">theta =</span> <span class="dv">65</span>,                    <span class="co">#angle of the perspective</span></span>
+<span id="cb43-22"><a href="smoothing-splines.html#cb43-22" tabindex="-1"></a>           <span class="at">col =</span> <span class="st">&quot;green&quot;</span>)</span>
+<span id="cb43-23"><a href="smoothing-splines.html#cb43-23" tabindex="-1"></a></span>
+<span id="cb43-24"><a href="smoothing-splines.html#cb43-24" tabindex="-1"></a><span class="co"># To add the points, you need the same 3d transformation</span></span>
+<span id="cb43-25"><a href="smoothing-splines.html#cb43-25" tabindex="-1"></a>obs <span class="ot">&lt;-</span> <span class="fu">with</span>(bmd.data[bmd.data<span class="sc">$</span>sex<span class="sc">==</span><span class="st">&quot;F&quot;</span>, ], </span>
+<span id="cb43-26"><a href="smoothing-splines.html#cb43-26" tabindex="-1"></a>            <span class="fu">trans3d</span>(age, bmi, bmd, p))</span>
+<span id="cb43-27"><a href="smoothing-splines.html#cb43-27" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">with</span>(bmd.data[bmd.data<span class="sc">$</span>sex<span class="sc">==</span><span class="st">&quot;F&quot;</span>, ], </span>
+<span id="cb43-28"><a href="smoothing-splines.html#cb43-28" tabindex="-1"></a>             <span class="fu">trans3d</span>(age, bmi, <span class="fu">fitted</span>(bmd.gam)[bmd.data<span class="sc">$</span>sex<span class="sc">==</span><span class="st">&quot;F&quot;</span>], p))</span>
+<span id="cb43-29"><a href="smoothing-splines.html#cb43-29" tabindex="-1"></a></span>
+<span id="cb43-30"><a href="smoothing-splines.html#cb43-30" tabindex="-1"></a></span>
+<span id="cb43-31"><a href="smoothing-splines.html#cb43-31" tabindex="-1"></a><span class="co"># Add segments to show the points and where they are in 3d</span></span>
+<span id="cb43-32"><a href="smoothing-splines.html#cb43-32" tabindex="-1"></a><span class="fu">points</span>(obs, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">pch =</span> <span class="dv">16</span>)</span>
+<span id="cb43-33"><a href="smoothing-splines.html#cb43-33" tabindex="-1"></a><span class="fu">segments</span>(obs<span class="sc">$</span>x, obs<span class="sc">$</span>y, pred<span class="sc">$</span>x, pred<span class="sc">$</span>y)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><strong>TRY IT YOURSELF:</strong></p>
+<ol style="list-style-type: decimal">
+<li>How would the plot for sex=M compare to the surface above?</li>
+</ol>
+<details>
+<summary>
+See the solution code
+</summary>
+<p>The surface would have exactly the same shape but would be separated by the 0.08
+units (estimate for the variable sex in the model)</p>
+</details>
+<p>
+<p>
+<ol start="2" style="list-style-type: decimal">
+<li>Fit a linear model with the same variables and compare the AIC of the linear
+model with the previous GAM model</li>
+</ol>
+<details>
+<summary>
+See the solution code
+</summary>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="smoothing-splines.html#cb44-1" tabindex="-1"></a>bmd.glm <span class="ot">&lt;-</span> <span class="fu">glm</span>(bmd <span class="sc">~</span> age<span class="sc">+</span>bmi<span class="sc">+</span> sex, <span class="at">data=</span>bmd.data)</span>
+<span id="cb44-2"><a href="smoothing-splines.html#cb44-2" tabindex="-1"></a><span class="fu">summary</span>(bmd.glm)</span>
+<span id="cb44-3"><a href="smoothing-splines.html#cb44-3" tabindex="-1"></a><span class="fu">AIC</span>(bmd.glm, bmd.gam)</span></code></pre></div>
+<p>The GAM model seems to fit better because it has a lower AIC.</p>
+</details>
+<p>
+<p>
+</div>
+</div>
+<div id="SS4" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Exercises<a href="smoothing-splines.html#SS4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Solve the following exercise:</p>
+<ol style="list-style-type: decimal">
+<li>The dataset <a href="https://www.dropbox.com/s/cwkw3p91zyizcqz/SA_heart.csv?dl=1">SA_heart.csv</a>
+contains on coronary heart disease status (variable <em>chd</em>) and several risk
+factors including the cumulative tobacco consumption <em>tobacco</em>, systolic <em>sbp</em>,
+and <em>age</em></li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>Fit a GAM logistic model for <em>chd</em> with splines for the predictor
+<em>tobacco</em>,<em>sbp</em> and <em>age</em></li>
+</ol>
+<details>
+<summary>
+See the solution code for a)
+</summary>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="smoothing-splines.html#cb45-1" tabindex="-1"></a>    <span class="fu">library</span>(caret)</span>
+<span id="cb45-2"><a href="smoothing-splines.html#cb45-2" tabindex="-1"></a>    <span class="fu">library</span>(splines)</span>
+<span id="cb45-3"><a href="smoothing-splines.html#cb45-3" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">2001</span>)</span>
+<span id="cb45-4"><a href="smoothing-splines.html#cb45-4" tabindex="-1"></a>    SA_heart <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://www.dropbox.com/s/cwkw3p91zyizcqz/SA_heart.csv?dl=1&quot;</span>)</span>
+<span id="cb45-5"><a href="smoothing-splines.html#cb45-5" tabindex="-1"></a>    </span>
+<span id="cb45-6"><a href="smoothing-splines.html#cb45-6" tabindex="-1"></a>    chd.gam <span class="ot">&lt;-</span> <span class="fu">gam</span>(chd <span class="sc">~</span> <span class="fu">s</span>(tobacco, <span class="at">bs=</span><span class="st">&quot;cr&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb45-7"><a href="smoothing-splines.html#cb45-7" tabindex="-1"></a>                     <span class="fu">s</span>(sbp, <span class="at">bs=</span><span class="st">&quot;cr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb45-8"><a href="smoothing-splines.html#cb45-8" tabindex="-1"></a>                     <span class="fu">s</span>(age, <span class="at">bs=</span><span class="st">&quot;cr&quot;</span>), </span>
+<span id="cb45-9"><a href="smoothing-splines.html#cb45-9" tabindex="-1"></a>                   <span class="at">family =</span> binomial, </span>
+<span id="cb45-10"><a href="smoothing-splines.html#cb45-10" tabindex="-1"></a>                   <span class="at">data=</span>SA_heart)</span>
+<span id="cb45-11"><a href="smoothing-splines.html#cb45-11" tabindex="-1"></a>    <span class="fu">summary</span>(chd.gam)</span>
+<span id="cb45-12"><a href="smoothing-splines.html#cb45-12" tabindex="-1"></a>    <span class="fu">plot</span>(chd.gam)</span></code></pre></div>
+<img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="672" /><img src="_main_files/figure-html/unnamed-chunk-22-2.png" width="672" /><img src="_main_files/figure-html/unnamed-chunk-22-3.png" width="672" />
+</details>
+<p>
+<p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>Find the AUC ROC for the model above.</p></li>
+<li><p>Compare the AUC ROC of the GAM model with a logistic regression with
+linear effects for the predictors.</p></li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li>The dataset <a href="https://www.dropbox.com/s/jeqdtq04zl9f0er/FEV.csv?dl=1">fev.csv</a> contains the measurements of forced expiratory volume (FEV) tests, evaluating the pulmonary capacity in 654 children and young adults.</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li><p>Plot the association between <em>fev</em> and <em>height</em> and fit a smoothing spline for <em>fev</em> using <em>height</em> as a predictor</p></li>
+<li><p>Plot the association between <em>fev</em> and <em>age</em> and fit a smoothing spline for <em>fev</em> using <em>age</em> as a predictor</p></li>
+<li><p>Fit a GAM model for <em>fev</em> with smoothing slipes for <em>height</em> and <em>age</em> and also add <em>sex</em> to the model.</p></li>
+<li><p>Comment in the results of the fitted GAM model and plot the fitted splines for the predictors</p></li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="piecewise-regression-and-splines.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
